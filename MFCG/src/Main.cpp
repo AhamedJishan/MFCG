@@ -2,5 +2,5 @@
 
 int main()
 {
-	MFCG::Vec3f a;
+	mfcg::Vec3f a;
 }
