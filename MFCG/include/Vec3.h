@@ -16,4 +16,6 @@ namespace MFCG
 	};
 
 	typedef Vec3<float> Vec3f;
+	typedef Vec3<int> Vec3i;
+	typedef Vec3<double> Vec3d;
 }
