@@ -8,6 +8,10 @@ namespace mfcg
 	class Vec3
 	{
 	public:
+		// x, y, z component of the vector
+		T x, y, z;
+
+	public:
 		// Constructs a vec3 with x=0, y=0, z=0
 		Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
 		// Constructs a vec3 with =t, y=t, z=t
@@ -54,9 +58,9 @@ namespace mfcg
 		*
 		* @return A reference to the normalized vector.
 		*/
-		Vec3<T> normalize()
+		Vec3<T>& normalize()
 		{
-			T len = length();
+			T len = magnitude();
 			if (len > 0)
 			{
 				T lenInv = 1 / len;
@@ -67,17 +71,58 @@ namespace mfcg
 			return *this;
 		}
 
-	public:
-		// x, y, z component of the vector
-		T x, y, z;
+		/**
+		* @brief Computes the dot product of this vector with another vector.
+		*
+		* @tparam T The type of the vector components (e.g., float, double).
+		* @param v The vector to compute the dot product with.
+		* @return The dot product of this vector and the given vector.
+		*/
+		T dot(const Vec3<T>& v)
+		{
+			return x * v.x + y * v.y + z * v.z;
+		}
+
+		/**
+		* @brief Computes the cross product of this vector with another vector.
+		*
+		* @tparam T The type of the vector components (e.g., float, double).
+		* @param v The vector to compute the cross product with.
+		* @return The cross product of this vector and the given vector.
+		*/
+		Vec3<T> cross(const Vec3<T>& v)
+		{
+			return Vec3<T>(
+				y * v.z - z * v.y,
+				z * v.x - x * v.z,
+				x * v.y - y * v.x);
+		}
+
+		// Overloaded addition operator for vector addition
+		Vec3<T> operator +(const Vec3<T>& v)
+		{
+			return Vec3<T>(x + v.x, y + v.y, z + v.z);
+		}
+		// Overloaded subtraction operator for vector suntraction
+		Vec3<T> operator -(const Vec3<T>& v)
+		{
+			return Vec3<T>(x - v.x, y - v.y, z - v.z);
+		}
+		// Overloaded multiplication operator for scalar multiplication
+		Vec3<T> operator *(const T& s)
+		{
+			return Vec3<T>(x * s, y * s, z * s);
+		}
 	};
 
+	// TYPEDEFS
+	// --------
 	typedef Vec3<float> Vec3f;
 	typedef Vec3<int> Vec3i;
 	typedef Vec3<double> Vec3d;
 
 
-	// Utility functions for Vec3
+	// UTILITY FUNCTIONS FOR VEC3
 	// --------------------------
 
 	/**
@@ -128,9 +173,9 @@ namespace mfcg
 	* @param v The vector to be normalized.
 	*/
 	template<typename T>
-	void normalize(Vec3<T> v)
+	void normalize(Vec3<T>& v)
 	{
-		T len = length();
+		T len = magnitude(v);
 		if (len > 0)
 		{
 			T lenInv = 1 / len;
@@ -138,5 +183,36 @@ namespace mfcg
 			v.y *= lenInv;
 			v.z *= lenInv;
 		}
+	}
+
+	/**
+	* @brief Computes the dot product of two vectors.
+	*
+	* @tparam T The type of the vector components (e.g., float, double).
+	* @param a The first vector.
+	* @param b The second vector.
+	* @return The dot product of the two vectors.
+	*/
+	template<typename T>
+	T dot(const Vec3<T>& a, const Vec3<T>& b)
+	{
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
+
+	/**
+	* @brief Computes the cross product of two vectors.
+	*
+	* @tparam T The type of the vector components (e.g., float, double).
+	* @param a The first vector.
+	* @param b The second vector.
+	* @return The cross product of the two vectors.
+	*/
+	template<typename T>
+	Vec3<T> cross(const Vec3<T> a, const Vec3<T>& b)
+	{
+		return Vec3<T>(
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x);
 	}
 }
